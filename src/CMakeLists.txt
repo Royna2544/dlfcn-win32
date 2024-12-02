@@ -1,8 +1,13 @@
 set(headers dlfcn.h)
 set(sources dlfcn.c)
 
-
 add_library(dl ${sources})
+
+if (MSVC)
+  target_compile_options(dl PRIVATE /W4)
+else()
+  target_compile_options(dl PRIVATE -Wall)
+endif()
 
 # Correctly export the location of installed includes in the target
 target_include_directories(dl
@@ -10,7 +15,7 @@ target_include_directories(dl
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>)
 
-# dot not add -D<target>_EXPORTS
+# do not add -D<target>_EXPORTS
 set_target_properties(dl PROPERTIES DEFINE_SYMBOL "")
 
 # set shared mode for compiling library and propagate mode to cmake clients

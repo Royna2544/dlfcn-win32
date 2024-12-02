@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 2.8.11...3.2)
+if (NOT WIN32)
+    return()
+endif()
 
-if (NOT DEFINED CMAKE_BUILD_TYPE)
-  set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
-endif ()
+cmake_minimum_required(VERSION 2.8.11)
 
 project (dlfcn-win32 C)
 
@@ -12,20 +12,7 @@ include(Macros)
 option(BUILD_SHARED_LIBS "shared/static libs" ON) 
 option(BUILD_TESTS "tests?" OFF)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-if (MSVC)
-    add_compile_options(/W4)
-else()
-    add_compile_options(-Wall)
-endif()
-
-if(WIN32)
-    add_subdirectory(src)
-endif()
-
+add_subdirectory(src)
 if (BUILD_TESTS)
     if (CMAKE_CROSSCOMPILING AND NOT DEFINED CMAKE_CROSSCOMPILING_EMULATOR)
         message(WARNING "You might want to set CMAKE_CROSSCOMPILING_EMULATOR to wine path in order to run tests")
